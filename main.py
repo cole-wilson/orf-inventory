@@ -140,6 +140,7 @@ def senseloop():
 if __name__ == '__main__':
 	try:
 		keyboard.add_hotkey('alt', newmode)
+		keyboard.add_hotkey('ctrl+tab', newmode)
 		keyboard.add_hotkey('ctrl+c', lambda: print('Type /quit to leave'))
 		thread1 = Thread(target=screenloop)
 		thread2 = Thread(target=senseloop)
