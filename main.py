@@ -16,6 +16,10 @@ from helpers.handleadd import handleadd
 
 term = blessed.Terminal()  # For colored output
 
+# Ensure directory exists:
+if not os.path.isdir('barcodes'):
+	os.mkdir('barcodes')
+
 # Display warning
 print(term.red+'WARNING:\n\tOnly exit this script with /quit, not ctrl+c!'+term.normal)
 if ('--debug' not in sys.argv
@@ -46,10 +50,20 @@ destination = 'stock'
 prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
 
+__version__ = "0.1.0"
+
 # "clear" screen
 print('\n'*(rows-2))
-
 # Helper functions: #################################################################
+def helptext():
+	with term.location(0,round(rows/2)):
+		print((term.red('Welcome to the inventory scanner!')).center(cols))
+		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
+		print((term.red('Press the `alt` key to cycle through modes.')).center(cols))
+helptext()
+def clearhelptext():
+	with term.location(0,round(rows/2)-3):
+		print(' '.center(cols*4))
 def movecursor(x,y):
 	print('\033[%d;%dH' % (y, x),end="")
 	print('Scanned barcode: {}'.format(inp))
@@ -83,6 +97,7 @@ def set_OLED(text):
 def screenloop():
 	global noerror
 	try:
+		cleared = False
 		while True:  # What user sees on screen
 			intext = input("\n"+prompt.format(modes[mode])).replace('^[[','')
 			if intext == '':
@@ -90,6 +105,9 @@ def screenloop():
 			elif intext.startswith('/quit'):
 				print(term.normal)
 				sys.exit(0)
+			elif intext.startswith('/?'):
+				helptext()
+				continue
 			print(term.normal+'\033[F'+(message)+(' '*(cols-len(message))) + '\033[F'+(" "*cols)+"\r", end='')
 			if mode == 1:
 				handlebarcode(intext, source, destination)
@@ -99,13 +117,24 @@ def screenloop():
 				handlesql(intext)
 			elif mode == 4:
 				handlebash(intext)
-	except KeyboardInterrupt:
-		print('exiting, there may or may not have been an error...')
+			if not cleared:
+				cleared = True
+				clearhelptext()
+	except BaseException as err:
+		print('exiting, there may or may not have been an error...\n\t{}'.format(err))
 		noerror = False
 def senseloop():
 	global noerror # Checks if screenloop has errored, because that won't stop thread
+	count = 0
 	while noerror:
 		time.sleep(0.3)
+		if count % 4 == 0:
+			with term.location(0,0):
+				left = "Inventory Scanner v" + __version__
+				right = "Olympia Robotics Federation 4450"
+				center = str(round(time.time()))
+				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
+		count += 1
 
 ###################################################################
 if __name__ == '__main__':

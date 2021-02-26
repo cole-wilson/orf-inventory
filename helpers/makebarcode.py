@@ -4,6 +4,7 @@ import treepoem
 import sys
 
 def make_barcode(data):
+    data = str(data)
     image = treepoem.generate_barcode(
             barcode_type='azteccode',
     	    data=data

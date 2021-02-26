@@ -1,8 +1,10 @@
 import os
 import sys
 import mysql.connector
+from helpers.labelmaker import makelabel
 import blessed
-
+from helpers.handlesql import handlesql
+from helpers.makebarcode import make_barcode as makebarcode
 term = blessed.Terminal()  # For colored output
 db = mysql.connector.connect(
 	username="pi",
@@ -11,7 +13,17 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor(buffered=True)
 
-def handlebarcode(itemname):
+def coloredinput(i):
+	if i == '/quit':
+		sys.exit(0)
+	return input(term.green(i))
+
+def coloredprint(*args):
+	return print(term.purple(" ".join(args)))
+
+def handleadd(itemname):
+	input = coloredinput
+	print = coloredprint
 	if itemname == '':
 		print('')
 		return
@@ -32,7 +44,7 @@ def handlebarcode(itemname):
 			break
 
 	# Get Supplier ================
-	cursor.execute("SELECT * FROM categories")
+	cursor.execute("SELECT * FROM suppliers")
 	validsuppliers = []
 	for abbreviation, name in cursor.fetchall():
 		validsuppliers.append(abbreviation)
@@ -49,13 +61,13 @@ def handlebarcode(itemname):
 		try:
 			itemcost = float(itemcost)
 			break
-		else:
+		except:
 			print('That is not a valid cost.')
 	# Get part number
 	partnum = input("Part Number >")
 	if len(partnum) > 12:
 		partnum = partnum[:12]
-	
+
 	# get qty
 	try:
 		qty_stock = int(input('Quantity in stock [blank for 0] > '))
@@ -75,8 +87,14 @@ def handlebarcode(itemname):
 	try:
 		sql = "INSERT INTO items VALUES ('{}',NULL,'{}','{}','{}',{},{},{},{})".format(itemcategory,itemname,itemsupplier,partnum,itemcost,qty_stock,qty_robot,qty_testing)
 		cursor.execute(sql)
+		sql = "SELECT item_num FROM items"
+		cursor.execute(sql)
+		barcode = cursor.fetchall()[-1][0]
 		db.commit()
+		handlesql("SELECT * from items")
 		print("Added!")
+		print('Printing label ({}) ...'.format(barcode))
+		makebarcode(barcode)
+		makelabel(text=barcode)
 	except mysql.connector.Error as err:
 		pass
-	print()
