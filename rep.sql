@@ -24,9 +24,9 @@ CREATE TABLE items
 	cat 		CHAR(1) 	NOT NULL REFERENCES category (cat_abbr),
 	item_num 	INT 		NOT NULL auto_increment primary key,
 	item_name 	VARCHAR(45) 	NOT NULL,
-	sup 		CHAR(3) 	NOT NULL,
+	sup 		CHAR(3) 	NOT NULL REFERENCES suppliers (sup_abbr),
 	sup_part_num	VARCHAR(12),
-	item_cost 	DECIMAL		REFERENCES suppliers (sup_abbr),
+	item_cost 	DECIMAL,
 	qty_stock 	INT 		NOT NULL DEFAULT 0,
 	qty_robot 	INT 		NOT NULL DEFAULT 0,
 	qty_testing 	INT 		NOT NULL DEFAULT 0
