@@ -49,4 +49,4 @@ INSERT INTO suppliers VALUES ("MCM","McMaster Carr");
 INSERT INTO suppliers VALUES ("AMK","Andy Mark");
 INSERT INTO suppliers VALUES ("VEX","VEX Robotics");
 INSERT INTO suppliers VALUES ("REV","Rev Robotics");
-INSERT INTO suppliers VALUES ("AMK","Andy Mark");
+#INSERT INTO suppliers VALUES ("AMK","Andy Mark");
