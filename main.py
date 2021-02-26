@@ -35,7 +35,7 @@ if os.geteuid() != 0:
 mode = 1
 modes = {
     1: 'SCAN BARCODE',
-    2: 'ADD ITEM',
+    2: 'ADD ITEM NAME',
     3: 'SQL SHELL',
     4: 'BASH SHELL'
 }
