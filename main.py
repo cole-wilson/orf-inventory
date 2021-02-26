@@ -41,6 +41,8 @@ modes = {
 }
 noerror = True
 message = ''
+source = 'robot'
+destination = 'stock'
 prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
 
@@ -90,14 +92,14 @@ def screenloop():
 				sys.exit(0)
 			print(term.normal+'\033[F'+(message)+(' '*(cols-len(message))) + '\033[F'+(" "*cols)+"\r", end='')
 			if mode == 1:
-				handlebarcode(intext)
+				handlebarcode(intext, source, destination)
 			elif mode == 2:
 				handleadd(intext)
 			elif mode == 3:
 				handlesql(intext)
 			elif mode == 4:
 				handlebash(intext)
-	except:
+	except KeyboardInterrupt:
 		print('exiting, there may or may not have been an error...')
 		noerror = False
 def senseloop():
