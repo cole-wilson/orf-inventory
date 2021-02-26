@@ -1,0 +1,2 @@
+language = "bash"
+run = "# Don't do anything."
