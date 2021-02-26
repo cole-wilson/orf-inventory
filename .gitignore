@@ -1,3 +1,11 @@
 .vim/*
 .vimrc
 .viminfo
+.gitconfig
+.cahce/*
+.bash_history
+.gnupg/*
+.local/*
+.python_history
+.pythonhistory
+.profile
