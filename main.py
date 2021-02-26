@@ -40,8 +40,8 @@ modes = {
     4: 'BASH SHELL'
 }
 noerror = True
-message = term.black_on_white('Press `alt` to switch between modes: {modes}'.format(modes=", ".join([*modes.values()])))
-prompt = term.cyan+'[{}] > '+term.red
+message = ''
+prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
 
 # "clear" screen

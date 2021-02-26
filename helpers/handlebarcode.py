@@ -1,0 +1,2 @@
+def handlebarcode(inp):
+    pass
