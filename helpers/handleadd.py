@@ -14,9 +14,11 @@ db = mysql.connector.connect(
 cursor = db.cursor(buffered=True)
 
 def coloredinput(i):
+	i = input(term.green(i))
 	if i == '/quit':
 		sys.exit(0)
-	return input(term.green(i))
+	else:
+		return i
 
 def coloredprint(*args):
 	return print(term.purple(" ".join(args)))

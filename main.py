@@ -8,6 +8,7 @@ import os
 import sys
 import blessed
 import readline
+import random
 
 # Import modules
 from helpers.handlesql import handlesql
@@ -40,8 +41,8 @@ mode = 1
 modes = {
     1: 'SCAN BARCODE',
     2: 'ADD ITEM NAME',
-    3: 'SQL SHELL',
-    4: 'BASH SHELL'
+    3: 'SQL shell',
+    4: 'bash'
 }
 noerror = True
 message = ''
@@ -58,8 +59,8 @@ print('\n'*(rows-2))
 def helptext():
 	with term.location(0,round(rows/2)):
 		print((term.red('Welcome to the inventory scanner!')).center(cols))
-		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
-		print((term.red('Press the `alt` key to cycle through modes.')).center(cols))
+		print((term.red('Type /q for help. Type /quit to exit.')).center(cols))
+		print((term.red('Press the `alt` key (or ctrl+tab) to cycle through modes.')).center(cols))
 helptext()
 def clearhelptext():
 	with term.location(0,round(rows/2)-3):
@@ -69,10 +70,10 @@ def movecursor(x,y):
 	print('Scanned barcode: {}'.format(inp))
 
 def handlebash(inp):
-	if inp.startswith('!'):
+	if inp.startswith(','):
 		os.system(inp[1:])
 	else:
-		if input(term.red('Are you sure you would like to run {}? [y/n] (to disable message prepend `!` to command) '.format(inp)))[0] == 'y':
+		if (input(term.red('Are you sure you would like to run {}? [y/n] (to disable message prepend `,` to command) '.format(inp)))+"y")[0] == 'y':
 			os.system(inp)
 
 def newmode():
@@ -121,7 +122,11 @@ def screenloop():
 				cleared = True
 				clearhelptext()
 	except BaseException as err:
-		print('exiting, there may or may not have been an error...\n\t{}'.format(err))
+		if str(err) != "0":
+			print('exiting, there may or may not have been an error...\n\t{}'.format(err))
+
+		else:
+			print('Bye!')
 		noerror = False
 def senseloop():
 	global noerror # Checks if screenloop has errored, because that won't stop thread
@@ -132,7 +137,7 @@ def senseloop():
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
-				center = str(round(time.time()))
+				center = "".join([chr(random.randint(66,130)) for i in range(100)]) # simulate work
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 
