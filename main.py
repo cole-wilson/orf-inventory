@@ -143,7 +143,7 @@ def senseloop():
 		time.sleep(0.5)
 		if count % 4 == 0:
 			destination = random.choice(['robot','stock','testing'])
-			OLED(source=source,destination=destination,message=str(time.time()),messagecolor='yellow')
+			OLED(source=source,destination=destination,message=[str(time.time())])
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
