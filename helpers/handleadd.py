@@ -1,10 +1,9 @@
 import os
 import sys
 import mysql.connector
-from helpers.labelmaker import makelabel
 import blessed
 from helpers.handlesql import handlesql
-from helpers.makebarcode import make_barcode as makebarcode
+from helpers.makebarcode import print_label
 term = blessed.Terminal()  # For colored output
 db = mysql.connector.connect(
 	username="pi",
@@ -96,7 +95,6 @@ def handleadd(itemname):
 		handlesql("SELECT * from items")
 		print("Added!")
 		print('Printing label ({}) ...'.format(barcode))
-		makebarcode(barcode)
-		makelabel(text=barcode)
+		print_label(barcode)
 	except mysql.connector.Error as err:
 		pass
