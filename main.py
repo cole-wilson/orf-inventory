@@ -135,15 +135,19 @@ def screenloop():
 		noerror = False
 def senseloop():
 	global noerror
+	global source
+	global destination
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
 		OLED(source=source, destination=destination)
 		time.sleep(0.5)
 		if count % 4 == 0:
+			destination = random.choice(['robot','stock','testing'])
+			OLED(source=source,destination=destination,message=str(time.time()),messagecolor='yellow')
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
-				center = str(round(time.time()))
+				center = "{} -> {}".format(source,destination)
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 
