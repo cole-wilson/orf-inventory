@@ -62,7 +62,7 @@ def helptext():
 		print((term.red('Welcome to the inventory scanner!')).center(cols))
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
-		print((term.red('Type `/.` to list all records.')).center(cols))
+		print((term.red('Type /. to list all records in the items table.')).center(cols))
 helptext()
 def clearhelptext():
 	with term.location(0,round(rows/2)-3):
@@ -108,9 +108,9 @@ def screenloop():
 			elif intext == '/mode':
 				newmode()
 				continue
-#			elif intext == '/.':
-#				handlesql('SELECT * FROM items')
-#				continue
+			elif intext == '/.':
+				handlesql('SELECT * FROM items')
+				continue
 			elif intext.startswith('/?'):
 				helptext()
 				continue
@@ -142,6 +142,7 @@ def senseloop():
 		OLED(source=source, destination=destination)
 		time.sleep(0.5)
 		if count % 4 == 0:
+			source = random.choice(['robot','stock','testing'])
 			destination = random.choice(['robot','stock','testing'])
 			OLED(source=source,destination=destination,message=[str(time.time())])
 			with term.location(0,0):
