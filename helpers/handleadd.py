@@ -66,7 +66,7 @@ def handleadd(itemname):
 		except:
 			print('That is not a valid cost.')
 	# Get part number
-	partnum = input("Part Number >")
+	partnum = input("Part Number > ")
 	if len(partnum) > 12:
 		partnum = partnum[:12]
 

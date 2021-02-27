@@ -2,9 +2,8 @@ import os
 import sys
 import mysql.connector
 from prettytable import PrettyTable
-import blessed
+from blessed import Terminal()
 
-term = blessed.Terminal()
 #try:
 db = mysql.connector.connect(
         username="pi",
@@ -26,8 +25,7 @@ def handlesql(inp):
             table = PrettyTable()
             table.field_names = [i[0] for i in cursor.description]
             table.add_rows(a)
-            print('\n')# + term.purple)
+            print('\n')
             print(table)
-            #print(term.normal)
         except mysql.connector.Error as err:
             print('Error: {}'.format(err))

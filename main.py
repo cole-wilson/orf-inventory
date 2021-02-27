@@ -14,6 +14,7 @@ import random
 from helpers.handlesql import handlesql
 from helpers.handlebarcode import handlebarcode
 from helpers.handleadd import handleadd
+from helpers.OLED import OLED
 
 term = blessed.Terminal()  # For colored output
 
@@ -39,9 +40,9 @@ if os.geteuid() != 0:
 # Setup variables
 mode = 1
 modes = {
-    1: 'SCAN BARCODE',
-    2: 'ADD ITEM NAME',
-    3: 'SQL shell',
+    1: 'scan',
+    2: 'add (type name)',
+    3: 'sql',
     4: 'bash'
 }
 noerror = True
@@ -59,12 +60,13 @@ print('\n'*(rows-2))
 def helptext():
 	with term.location(0,round(rows/2)):
 		print((term.red('Welcome to the inventory scanner!')).center(cols))
-		print((term.red('Type /q for help. Type /quit to exit.')).center(cols))
-		print((term.red('Press the `alt` key (or ctrl+tab) to cycle through modes.')).center(cols))
+		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
+		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
+		print((term.red('Type `/.` to list all records.')).center(cols))
 helptext()
 def clearhelptext():
 	with term.location(0,round(rows/2)-3):
-		print(' '.center(cols*4))
+		print(' '.center(cols*5))
 def movecursor(x,y):
 	print('\033[%d;%dH' % (y, x),end="")
 	print('Scanned barcode: {}'.format(inp))
@@ -81,9 +83,6 @@ def newmode():
 	print('\r' + (' '*cols), end='')
 	mode = 1 if mode==[*modes.keys()][-1] else mode+1
 	print('\r'+prompt.format(modes[mode]), end='')
-
-def set_OLED(text):
-	print('OLED HAS BEEN SET: {}'.format(text))
 
 # Mainloop functions: ##################################################################
 
@@ -106,6 +105,12 @@ def screenloop():
 			elif intext.startswith('/quit'):
 				print(term.normal)
 				sys.exit(0)
+			elif intext == '/mode':
+				newmode()
+				continue
+#			elif intext == '/.':
+#				handlesql('SELECT * FROM items')
+#				continue
 			elif intext.startswith('/?'):
 				helptext()
 				continue
@@ -129,15 +134,16 @@ def screenloop():
 			print('Bye!')
 		noerror = False
 def senseloop():
-	global noerror # Checks if screenloop has errored, because that won't stop thread
+	global noerror
 	count = 0
-	while noerror:
-		time.sleep(0.3)
+	while noerror: # Checks if screenloop has errored, because that won't stop thread
+		OLED(source=source, destination=destination)
+		time.sleep(0.5)
 		if count % 4 == 0:
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
-				center = "".join([chr(random.randint(66,130)) for i in range(100)]) # simulate work
+				center = str(round(time.time()))
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 
