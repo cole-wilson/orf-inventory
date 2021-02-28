@@ -58,15 +58,17 @@ __version__ = "0.1.0"
 print('\n'*(rows-2))
 # Helper functions: #################################################################
 def helptext():
-	with term.location(0,round(rows/2)):
+	with term.location(0,round(rows/3)):
+		for line in os.popen('figlet Inventory Scanner').read().split('\n'):
+			print(term.purple(line).center(cols))
 		print((term.red('Welcome to the inventory scanner!')).center(cols))
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
 helptext()
 def clearhelptext():
-	with term.location(0,round(rows/2)-3):
-		print(' '.center(cols*5))
+	with term.location(0,round(rows/3)-10):
+		print(' '.center(cols*10))
 def movecursor(x,y):
 	print('\033[%d;%dH' % (y, x),end="")
 	print('Scanned barcode: {}'.format(inp))

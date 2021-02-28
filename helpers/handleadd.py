@@ -38,7 +38,7 @@ def handleadd(itemname):
 		validabrevs.append(abbreviation)
 		print('{}: {}'.format(abbreviation, name))
 	while True:
-		itemcategory = input('Choose a category from the above list > ')
+		itemcategory = input('Choose a category from the above list > ').upper()
 		if itemcategory not in validabrevs:
 			print('That is not a valid option.')
 		else:
@@ -51,7 +51,7 @@ def handleadd(itemname):
 		validsuppliers.append(abbreviation)
 		print('{}: {}'.format(abbreviation, name))
 	while True:
-		itemsupplier = input('Choose a supplier from the above list > ')
+		itemsupplier = input('Choose a supplier from the above list > ').upper()
 		if itemsupplier not in validsuppliers:
 			print('That is not a valid option.')
 		else:
