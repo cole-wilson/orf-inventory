@@ -73,9 +73,10 @@ def helptext():
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
 		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
+		print(term.red('ctrl+space, ctrl+left, ctrl+right all act like rotary encoder.').center(cols))
 helptext() # Call helptext
 def clearhelptext():
-	with term.location(0,round(rows/3)-11):
+	with term.location(0,round(rows/3)-12):
 		print(' '.center(cols*10))
 def movecursor(x,y):
 	print('\033[%d;%dH' % (y, x),end="")
@@ -91,41 +92,43 @@ def newmode():
 	print('\r' + (' '*cols), end='')
 	mode = 1 if mode==[*modes.keys()][-1] else mode+1
 	print('\r'+prompt.format(modes[mode]), end='')
-	cmodestring = 'dest' if clickmode else 'source'
+	cmodestring = 'dest' if clickmode else 'src'
 	if mode != 1:
 		OLED(mode=cmodestring,source=source,destination=destination,message=['Warning:','Computer not','on scan mode!','switch to scan.'])
+	else:
+		OLED(mode=cmodestring,source=source,destination=destination,message=[])
 def re_sw_click(channel):
 	global clickmode
 	clickmode = not clickmode
-	cmodestring = 'dest' if clickmode else 'source'
+	cmodestring = 'dest' if clickmode else 'src'
 	OLED(source=source,destination=destination,mode=cmodestring)
-def re_dt_click(channel):
+def re_dt_click(channel, force=False):
 	global source
 	global destination
 	clkstate = GPIO.input(clkpin)
 	dtstate  = GPIO.input(dtpin)
-	if clkstate == 1 and dtstate == 0:
+	if clkstate == 1 and dtstate == 0 or force:
 		if clickmode:
 			try: destination = states[states.index(destination) + 1]
 			except IndexError: destination = states[0]
 		else:
 			try: source = states[states.index(source) + 1]
 			except: source = states[0]
-	cmodestring = 'dest' if clickmode else 'source'
+	cmodestring = 'dest' if clickmode else 'src'
 	OLED(source=source,destination=destination,mode=cmodestring)
-def re_clk_click(channel):
+def re_clk_click(channel,force=False):
 	global source
 	global destination
 	clkstate = GPIO.input(clkpin)
 	dtstate  = GPIO.input(dtpin)
-	if clkstate == 0 and dtstate == 1:
+	if clkstate == 0 and dtstate == 1 or force:
 		if clickmode:
 			try: destination = states[states.index(destination) - 1]
 			except IndexError: destination = states[-1]
 		else:
 			try: source = states[states.index(source) - 1]
 			except: source = states[-1]
-	cmodestring = 'dest' if clickmode else 'source'
+	cmodestring = 'dest' if clickmode else 'src'
 	OLED(source=source,destination=destination,mode=cmodestring)
 # Mainloop functions: ##################################################################
 
@@ -168,7 +171,7 @@ def screenloop():
 				continue
 			print(term.normal+'\033[F'+(message)+(' '*(cols-len(message))) + '\033[F'+(" "*cols)+"\r", end='')
 			if mode == 1:
-				cmodestring = 'dest' if clickmode else 'source'
+				cmodestring = 'dest' if clickmode else 'src'
 				handlebarcode(intext, source, destination, cmodestring)
 			elif mode == 2:
 				handleadd(intext)
@@ -203,7 +206,7 @@ def senseloop():
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
 		time.sleep(0.1)
-		if count % 10 == 0:
+		if count % 4 == 0:
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
@@ -218,6 +221,9 @@ if __name__ == '__main__':
 		keyboard.add_hotkey('ctrl+tab', newmode)
 		keyboard.add_hotkey('ctrl+c', lambda: print('Type /quit to leave'))
 		keyboard.add_hotkey('ctrl+l', lambda: print(end=''))
+		keyboard.add_hotkey('ctrl+left', lambda: re_clk_click(0,force=True))
+		keyboard.add_hotkey('ctrl+right', lambda: re_dt_click(0,force=True))
+		keyboard.add_hotkey('ctrl+space', lambda: re_sw_click(0))
 		thread1 = Thread(target=screenloop)
 		thread2 = Thread(target=senseloop)
 		thread1.start()
