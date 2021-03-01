@@ -15,6 +15,7 @@ from helpers.handlesql import handlesql, complete
 from helpers.handlebarcode import handlebarcode
 from helpers.handleadd import handleadd
 from helpers.OLED import OLED
+from helpers.makebarcode import print_label
 
 # Setup readline module:
 readline.parse_and_bind('tab: complete')
@@ -60,7 +61,7 @@ rows, cols = map(int,os.popen('stty size', 'r').read().split())
 __version__ = "0.1.0"
 
 # "clear" screen
-print('\n'*(rows-2))
+print('\n'*(rows),end='')
 # Helper functions: #################################################################
 def helptext():
 	with term.location(0,round(rows/3)):
@@ -70,9 +71,10 @@ def helptext():
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
+		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
 helptext()
 def clearhelptext():
-	with term.location(0,round(rows/3)-10):
+	with term.location(0,round(rows/3)-11):
 		print(' '.center(cols*10))
 def movecursor(x,y):
 	print('\033[%d;%dH' % (y, x),end="")
@@ -109,6 +111,15 @@ def screenloop():
 			intext = input("\n"+prompt.format(modes[mode])).replace('^[[','')
 			if intext == '':
 				pass
+			elif intext.startswith('/barcode'):
+				try:
+					amountofcodes = int(input('Number of codes > '))
+				except:
+					print('Not a valid number!')
+				ttprint = input('Text to print > ')
+				for x in range(amountofcodes):
+					print_label(ttprint)
+				continue
 			elif intext.startswith('/quit'):
 				print(term.normal)
 				sys.exit(0)
@@ -140,21 +151,20 @@ def screenloop():
 		else:
 			print('Bye!')
 		noerror = False
+##################################################################
 def senseloop():
 	global noerror
 	global source
 	global destination
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
-		time.sleep(0.5)
-		if count % 4 == 0:
-			source = random.choice(['robot','stock','testing'])
-			destination = random.choice(['robot','stock','testing'])
-			OLED(source=source,destination=destination,message=[str(time.time())])
+		time.sleep(0.1)
+		if count % 10 == 0:
+#			OLED(source=source,destination=destination,message=[str(time.time())])
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
-				center = "{}: {} -> {}".format(count,source,destination)
+				center = "{} -> {}".format(source,destination)
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 

@@ -65,7 +65,7 @@ def handleadd(itemname):
 		except:
 			print('That is not a valid cost.')
 	# Get part number
-	partnum = input("Part Number > ")
+	partnum = input("Supplier Part Number > ")
 	if len(partnum) > 12:
 		partnum = partnum[:12]
 
@@ -74,16 +74,8 @@ def handleadd(itemname):
 		qty_stock = int(input('Quantity in stock [blank for 0] > '))
 	except:
 		qty_stock = 0
-
-	try:
-		qty_robot = int(input('Quantity on robot [blank for 0] > '))
-	except:
-		qty_robot = 0
-
-	try:
-		qty_testing = int(input('Quantity in testing [blank for 0] > '))
-	except:
-		qty_testing = 0
+	qty_robot = 0
+	qty_testing = 0
 
 	try:
 		sql = "INSERT INTO items VALUES ('{}',NULL,'{}','{}','{}',{},{},{},{})".format(itemcategory,itemname,itemsupplier,partnum,itemcost,qty_stock,qty_robot,qty_testing)
@@ -95,7 +87,23 @@ def handleadd(itemname):
 		db.commit()
 		handlesql("SELECT * from items")
 		print("Added!")
-		print('Printing label ({}) ...'.format(barcode))
-		print_label(barcode)
+		while True:
+			if qty_stock < 5:
+				numprint = qty_stock
+				break
+			numprint = input('How many barcodes should I print? [blank for {}] > '.format(qty_stock))
+			if numprint == '':
+				numprint = qty_stock
+				break
+			try:
+				numprint = int(numprint)
+				assert numprint > 0
+				break
+			except:
+				print('That is not a valid number!')
+		print('Printing...')
+		for x in range(numprint):
+			print_label(barcode)
+		print('To print more barcodes, run /barcode.')
 	except mysql.connector.Error as err:
 		pass

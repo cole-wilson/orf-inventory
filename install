@@ -1,0 +1,3 @@
+sudo apt-get install python3-rpi.gpio -y
+sudo pip3 install Adafruit-SSD1306 smsbus
+echo "please enable I2C, and reboot. Then ,a"

@@ -23,7 +23,6 @@ def handlebarcode(barcode, source, destination):
                   '\t\tIn Stock: {}\t\tOn Robot: {}\t\tIn Testing: {}'.format(name, barcode, source, destination,
                       stock, robot, testing
                   ))
-            os.system('espeak "move one {} from {} to {}. There are now {} {}s in stock." -s 150 2> /dev/null&'.format(name,source,destination,stock,name))
         except IndexError:
             print(barcode, 'not found!')
         except mysql.connector.Error as err:
