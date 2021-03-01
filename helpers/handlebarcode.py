@@ -11,7 +11,7 @@ db = mysql.connector.connect(
 
 cursor = db.cursor(buffered=True)
 
-def handlebarcode(barcode, source, destination):
+def handlebarcode(barcode, source, destination, cmode):
     if barcode != "":
         try:
             sql = "UPDATE items SET qty_{d} = qty_{d} + 1, qty_{s} = qty_{s} - 1 WHERE item_num = '{b}'"
@@ -24,7 +24,7 @@ def handlebarcode(barcode, source, destination):
                   '\t\tIn Stock: {}\t\tOn Robot: {}\t\tIn Testing: {}'.format(name, barcode, source, destination,
                       stock, robot, testing
                   ))
-            OLED(source=source,destination=destination,message=[
+            OLED(mode=cmode,source=source,destination=destination,message=[
                 "Name: "+name,
                 "In Stock: {}".format(stock),
                 "On Robot: {}".format(robot),
