@@ -22,7 +22,7 @@ def complete(text, state):
 	cursor.execute('SELECT items.item_name, suppliers.sup_abbr FROM items, suppliers')
 	names = map(str,list(sum(cursor.fetchall(),())))
 #	names = []
-	sql_keywords = ['SELECT','INSERT','WHERE','INTO','VALUES','ORDER','FROM']
+	sql_keywords = ['item_num','item_name','categorie','supplier','items','SELECT','INSERT','WHERE','INTO','VALUES','ORDER','FROM']
 	files = os.listdir('.')
 	commands = ['quit','?','.','mode']
 	all = [*names,*sql_keywords,*files,*commands]

@@ -146,7 +146,6 @@ def senseloop():
 	global destination
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
-		OLED(source=source, destination=destination)
 		time.sleep(0.5)
 		if count % 4 == 0:
 			source = random.choice(['robot','stock','testing'])
