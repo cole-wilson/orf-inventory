@@ -88,6 +88,7 @@ def handleadd(itemname):
 	try:
 		sql = "INSERT INTO items VALUES ('{}',NULL,'{}','{}','{}',{},{},{},{})".format(itemcategory,itemname,itemsupplier,partnum,itemcost,qty_stock,qty_robot,qty_testing)
 		cursor.execute(sql)
+		db.commit()
 		sql = "SELECT item_num FROM items"
 		cursor.execute(sql)
 		barcode = cursor.fetchall()[-1][0]

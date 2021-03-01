@@ -164,6 +164,7 @@ if __name__ == '__main__':
 		keyboard.add_hotkey('alt', newmode)
 		keyboard.add_hotkey('ctrl+tab', newmode)
 		keyboard.add_hotkey('ctrl+c', lambda: print('Type /quit to leave'))
+		keyboard.add_hotkey('ctrl+l', lambda: print(end=''))
 		thread1 = Thread(target=screenloop)
 		thread2 = Thread(target=senseloop)
 		thread1.start()

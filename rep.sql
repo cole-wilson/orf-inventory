@@ -26,7 +26,7 @@ CREATE TABLE items
 	item_name 	VARCHAR(45) 	NOT NULL,
 	sup 		CHAR(3) 	NOT NULL REFERENCES suppliers (sup_abbr),
 	sup_part_num	VARCHAR(12),
-	item_cost 	DECIMAL,
+	item_cost 	DECIMAL(18,2),
 	qty_stock 	INT 		NOT NULL DEFAULT 0,
 	qty_robot 	INT 		NOT NULL DEFAULT 0,
 	qty_testing 	INT 		NOT NULL DEFAULT 0
