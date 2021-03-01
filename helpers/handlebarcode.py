@@ -1,6 +1,7 @@
 import os
 import sys
 import mysql.connector
+from helpers.OLED import OLED
 
 db = mysql.connector.connect(
         username="pi",
@@ -23,6 +24,12 @@ def handlebarcode(barcode, source, destination):
                   '\t\tIn Stock: {}\t\tOn Robot: {}\t\tIn Testing: {}'.format(name, barcode, source, destination,
                       stock, robot, testing
                   ))
+            OLED(source=source,destination=destination,message=[
+                "Name: "+name,
+                "In Stock: {}".format(stock),
+                "On Robot: {}".format(robot),
+                "In Testing: {}".format(testing)
+            ])
         except IndexError:
             print(barcode, 'not found!')
         except mysql.connector.Error as err:

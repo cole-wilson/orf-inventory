@@ -160,7 +160,8 @@ def senseloop():
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
 		time.sleep(0.1)
 		if count % 10 == 0:
-#			OLED(source=source,destination=destination,message=[str(time.time())])
+			if mode != 1:
+				OLED(source=source,destination=destination,message=['Warning:','Computer not','on scan mode!','switch to scan.'])
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"

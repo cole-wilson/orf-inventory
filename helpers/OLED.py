@@ -5,18 +5,10 @@ import subprocess
 import time
 
 font = ImageFont.load_default()
-
-class Nop(object):
-	def nop(*args,**kwargs):pass 
-	def __getattr__(self,_):return self.nop
-
-try:
-	display = ssd.SSD1306_128_64(rst=0)
-	display.begin()
-	display.clear()
-	display.display()
-except:
-	display = Nop()
+#display = ssd.SSD1306_128_64(rst=0)
+#display.begin()
+#display.clear()
+#display.display()
 padding = 8
 
 def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
@@ -33,11 +25,11 @@ def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 	wrap = 13
 	for count, line in enumerate(message):
 		draw.text((padding,padding + 20 + (count*9)), line, font=font, fill=messagecolor)
-#	img.save('output.png')
-	display.clear()
-	display.display()
-	display.image(img)
-	display.display()
+	img.save('output.png')
+#	display.clear()
+#	display.display()
+#	display.image(img)
+#	display.display()
 
 if __name__ == '__main__':
 	OLED(source='testsrc',destination='testdest',message=["","This is a","test message!"],mode='dest')
