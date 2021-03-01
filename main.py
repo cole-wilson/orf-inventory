@@ -11,16 +11,26 @@ import readline
 import random
 
 # Import modules
-from helpers.handlesql import handlesql
+from helpers.handlesql import handlesql, complete
 from helpers.handlebarcode import handlebarcode
 from helpers.handleadd import handleadd
 from helpers.OLED import OLED
 
+# Setup readline module:
+readline.parse_and_bind('tab: complete')
+readline.set_completer(complete)
 term = blessed.Terminal()  # For colored output
+
+
 
 # Ensure directory exists:
 if not os.path.isdir('barcodes'):
 	os.mkdir('barcodes')
+
+# Make sure program is running as root
+if os.geteuid() != 0:
+    print('You must run this script with `sudo` in front as the `pi` user:\n\n\tpi@inventory:~ $ sudo main.py\n\nBye!')
+    sys.exit(999)
 
 # Display warning
 print(term.red+'WARNING:\n\tOnly exit this script with /quit, not ctrl+c!'+term.normal)
@@ -31,11 +41,6 @@ if ('--debug' not in sys.argv
         print('starting in ' + str(5-x) + ' seconds...                 (to disable wait time run with --debug)', end='\r')
         time.sleep(1)
     print()
-
-# Make sure program is running as root
-if os.geteuid() != 0:
-    print('You must run this script with `sudo` in front as the `pi` user:\n\n\tpi@inventory:~ $ sudo main.py\n\nBye!')
-    sys.exit(999)
 
 # Setup variables
 mode = 1
@@ -107,10 +112,10 @@ def screenloop():
 			elif intext.startswith('/quit'):
 				print(term.normal)
 				sys.exit(0)
-			elif intext == '/mode':
+			elif intext.startswith('/mode'):
 				newmode()
 				continue
-			elif intext == '/.':
+			elif intext.startswith('/.'):
 				handlesql('SELECT * FROM items')
 				continue
 			elif intext.startswith('/?'):
@@ -150,7 +155,7 @@ def senseloop():
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
 				right = "Olympia Robotics Federation 4450"
-				center = "{} -> {}".format(source,destination)
+				center = "{}: {} -> {}".format(count,source,destination)
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 

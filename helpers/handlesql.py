@@ -3,6 +3,7 @@ import sys
 import mysql.connector
 from prettytable import PrettyTable
 import blessed
+import time
 
 term = blessed.Terminal()
 #try:
@@ -17,6 +18,17 @@ db = mysql.connector.connect(
 
 cursor = db.cursor(buffered=True)
 
+def complete(text, state):
+	cursor.execute('SELECT items.item_name, suppliers.sup_abbr FROM items, suppliers')
+	names = map(str,list(sum(cursor.fetchall(),())))
+#	names = []
+	sql_keywords = ['SELECT','INSERT','WHERE','INTO','VALUES','ORDER','FROM']
+	files = os.listdir('.')
+	commands = ['quit','?','.','mode']
+	all = [*names,*sql_keywords,*files,*commands]
+	all = [x+" " for x in all if x.upper().startswith(text.upper())] + [None]
+	return all[state]
+#complete('',0)
 def handlesql(inp):
     if inp != "":
         try:
