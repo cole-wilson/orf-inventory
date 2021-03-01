@@ -11,7 +11,7 @@ display.begin()
 img = Image.open('logo.png').convert(cmode)
 display.image(img)
 display.display()
-padding = 8
+padding = 2
 fill = 255
 
 
