@@ -7,7 +7,8 @@ import subprocess
 import time
 
 cmode = '1'
-font = ImageFont.load_default()
+font = ImageFont.truetype('font.ttf', size=18)
+font2 = ImageFont.truetype('font.ttf', size=13)
 #display = ssd.SSD1306_128_64(rst=0)
 display = sh1106(i2c(port=1, address=0x3C))
 #display.begin()
@@ -30,29 +31,26 @@ def LOGO():
 	#display.display()
 	display.display(bg)
 	#display.display()
+def cleanup():
+	display.cleanup()
 
 def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 	global lastused
 	global logo_set
+	message = "\n".join(message)
 	logo_set = False
-	img = Image.open('logo.png').convert(cmode)
+	img = Image.new('1',(128,64),'black')
 	draw = ImageDraw.Draw(img)
-	if mode == 'src':
-		stext = "From: {}".format(source)
-		dtext = "To:   {}".format(destination)
-	else:
-		stext = "From: {}".format(source)
-		dtext = "To:   {}".format(destination)
-	draw.text((padding,padding), stext, font=font, fill=fill)
-	draw.text((padding,padding + 10), dtext, font=font, fill=fill)
-	draw.line((padding,padding + 20, 128 - padding, padding + 20), fill=fill)
-	wrap = 13
-	for count, line in enumerate(message):
-		draw.text((padding,padding + 20 + (count*9)), line, font=font, fill=messagecolor)
+
+	draw.text((0,0), "From: ", font=font, fill=fill)
+	draw.text((0,17), "To:   ", font=font, fill=fill)
+	draw.text((60,0),source, font=font, fill=fill)
+	draw.text((60,17),destination, font=font, fill=fill)
+	draw.text((0,40), message, font=font2, fill=fill)
 	img.save('output.png')
 	#display.display()
 	display.display(img)
 	#display.display()
 	lastused = time.time()
 
-OLED(source='stock',destination='robot',message=["","Welcome to the","inventory", "scanner!"],mode='dest')
+OLED(source='stock',destination='robot',message=["      Welcome!"],mode='dest')

@@ -25,10 +25,7 @@ def handlebarcode(barcode, source, destination, cmode):
                       stock, robot, testing
                   ))
             OLED(mode=cmode,source=source,destination=destination,message=[
-                "Name: "+name,
-                "In Stock: {}".format(stock),
-                "On Robot: {}".format(robot),
-                "In Testing: {}".format(testing)
+                ""+name,
             ])
         except IndexError:
             print(barcode, 'not found!')

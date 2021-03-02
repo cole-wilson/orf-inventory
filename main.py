@@ -15,7 +15,7 @@ from RPi import GPIO
 from helpers.handlesql import handlesql, complete
 from helpers.handlebarcode import handlebarcode
 from helpers.handleadd import handleadd
-from helpers.OLED import OLED, last_used, LOGO, logo_set
+from helpers.OLED import OLED, last_used, LOGO, logo_set, cleanup
 from helpers.makebarcode import print_label
 
 # Setup readline module:
@@ -65,15 +65,17 @@ __version__ = "0.1.0"
 print('\n'*(rows),end='')
 # Helper functions: #################################################################
 def helptext():
-	with term.location(0,round(rows/3)):
-		for line in os.popen('figlet Inventory Scanner').read().split('\n'):
+	with term.location(0,1):
+		for line in range(round(rows/3)):
+			print(' '*cols, end='')
+		for line in open('banner.txt').read().split('\n'):
 			print(term.purple(line).center(cols))
-		print((term.red('Welcome to the inventory scanner!')).center(cols))
+		print((term.red('Welcome to the ORF Replicator!')).center(cols))
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
 		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
-		print(term.red('ctrl+space, ctrl+left, ctrl+right all act like rotary encoder.').center(cols))
+		print(term.red('ctrl+left and ctrl+right emulate rotary encoder.').center(cols))
 helptext() # Call helptext
 def clearhelptext():
 	with term.location(0,round(rows/3)-12):
@@ -94,9 +96,9 @@ def newmode():
 	print('\r'+prompt.format(modes[mode]), end='')
 	cmodestring = 'dest' if clickmode else 'src'
 	if mode != 1:
-		OLED(mode=cmodestring,source=source,destination=destination,message=['Warning:','Computer not','on scan mode!','switch to scan.'])
+		OLED(mode=cmodestring,source=source,destination=destination,message=['(not on scan)'])
 	else:
-		OLED(mode=cmodestring,source=source,destination=destination,message=[])
+		OLED(mode=cmodestring,source=source,destination=destination,message=[''])
 def re_sw_click(channel):
 	return
 	#global clickmode
@@ -207,13 +209,13 @@ def senseloop():
 			LOGO()
 		if count % 4 == 0:
 			with term.location(0,0):
-				left = "Inventory Scanner v" + __version__
+				left = "ORF Replicator v" + __version__
 				right = "Olympia Robotics Federation 4450"
 				center = "{} -> {}".format(source,destination)
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 	GPIO.cleanup()
-	LOGO()
+	cleanup()
 ###################################################################
 if __name__ == '__main__':
 	try:
