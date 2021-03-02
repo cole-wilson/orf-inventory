@@ -44,8 +44,8 @@ def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 
 	draw.text((0,0), "From: ", font=font, fill=fill)
 	draw.text((0,17), "To:   ", font=font, fill=fill)
-	draw.text((60,0),source, font=font, fill=fill)
-	draw.text((60,17),destination, font=font, fill=fill)
+	draw.text((50,0),source, font=font, fill=fill)
+	draw.text((50,17),destination, font=font, fill=fill)
 	draw.text((0,40), message, font=font2, fill=fill)
 	img.save('output.png')
 	#display.display()
