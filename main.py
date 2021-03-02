@@ -15,7 +15,7 @@ from RPi import GPIO
 from helpers.handlesql import handlesql, complete
 from helpers.handlebarcode import handlebarcode
 from helpers.handleadd import handleadd
-from helpers.OLED import OLED
+from helpers.OLED import OLED, last_used, LOGO, logo_set
 from helpers.makebarcode import print_label
 
 # Setup readline module:
@@ -206,6 +206,8 @@ def senseloop():
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
 		time.sleep(0.1)
+		if count % 20 == 0 and last_used() + (5*60) < time.time() and not logo_set:
+			LOGO()
 		if count % 4 == 0:
 			with term.location(0,0):
 				left = "Inventory Scanner v" + __version__
@@ -214,6 +216,7 @@ def senseloop():
 				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 	GPIO.cleanup()
+	LOGO()
 ###################################################################
 if __name__ == '__main__':
 	try:

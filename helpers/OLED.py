@@ -13,9 +13,25 @@ display.image(img)
 display.display()
 padding = 2
 fill = 255
+lastused = 0
+logo_set = False
 
+def last_used():
+	return lastused
+def LOGO():
+	global logo_set
+	logo_set = True
+	bg = Image.new('1',(128,64),'black')
+	img = Image.open('cropped-logo.png').convert(cmode).resize((64,64))
+	bg.paste(img,(32,0))
+	display.display()
+	display.image(bg)
+	display.display()
 
 def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
+	global lastused
+	global logo_set
+	logo_set = False
 	img = Image.open('logo.png').convert(cmode)
 	draw = ImageDraw.Draw(img)
 	if mode == 'src':
@@ -34,5 +50,6 @@ def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 	display.display()
 	display.image(img)
 	display.display()
+	lastused = time.time()
 
 OLED(source='stock',destination='robot',message=["","Welcome to the","inventory", "scanner!"],mode='dest')
