@@ -35,11 +35,11 @@ def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 	img = Image.open('logo.png').convert(cmode)
 	draw = ImageDraw.Draw(img)
 	if mode == 'src':
-		stext = "From: <- {} ->".format(source)
-		dtext = "To:      {}".format(destination)
+		stext = "From: {}".format(source)
+		dtext = "To:   {}".format(destination)
 	else:
-		stext = "From:    {}".format(source)
-		dtext = "To:   <- {} ->".format(destination)
+		stext = "From: {}".format(source)
+		dtext = "To:   {}".format(destination)
 	draw.text((padding,padding), stext, font=font, fill=fill)
 	draw.text((padding,padding + 10), dtext, font=font, fill=fill)
 	draw.line((padding,padding + 20, 128 - padding, padding + 20), fill=fill)

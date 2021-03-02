@@ -2,6 +2,7 @@ import os
 import sys
 import mysql.connector
 import blessed
+import keyboard
 from helpers.handlesql import handlesql
 from helpers.makebarcode import print_label
 term = blessed.Terminal()  # For colored output
@@ -15,7 +16,7 @@ cursor = db.cursor(buffered=True)
 def coloredinput(i):
 	i = input(term.green(i))
 	if i == '/quit':
-		sys.exit(0)
+		sys.exit(876)
 	else:
 		return i
 

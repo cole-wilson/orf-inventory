@@ -98,22 +98,19 @@ def newmode():
 	else:
 		OLED(mode=cmodestring,source=source,destination=destination,message=[])
 def re_sw_click(channel):
-	global clickmode
-	clickmode = not clickmode
-	cmodestring = 'dest' if clickmode else 'src'
-	OLED(source=source,destination=destination,mode=cmodestring)
+	return
+	#global clickmode
+	#clickmode = not clickmode
+	#cmodestring = 'dest' if clickmode else 'src'
+	#OLED(source=source,destination=destination,mode=cmodestring)
 def re_dt_click(channel, force=False):
 	global source
 	global destination
 	clkstate = GPIO.input(clkpin)
 	dtstate  = GPIO.input(dtpin)
 	if clkstate == 1 and dtstate == 0 or force:
-		if clickmode:
-			try: destination = states[states.index(destination) + 1]
-			except IndexError: destination = states[0]
-		else:
-			try: source = states[states.index(source) + 1]
-			except: source = states[0]
+		try: destination = states[states.index(destination) + 1]
+		except IndexError: destination = states[0]
 	cmodestring = 'dest' if clickmode else 'src'
 	OLED(source=source,destination=destination,mode=cmodestring)
 def re_clk_click(channel,force=False):
@@ -122,12 +119,8 @@ def re_clk_click(channel,force=False):
 	clkstate = GPIO.input(clkpin)
 	dtstate  = GPIO.input(dtpin)
 	if clkstate == 0 and dtstate == 1 or force:
-		if clickmode:
-			try: destination = states[states.index(destination) - 1]
-			except IndexError: destination = states[-1]
-		else:
-			try: source = states[states.index(source) - 1]
-			except: source = states[-1]
+		try: source = states[states.index(source) + 1]
+		except: source = states[0]
 	cmodestring = 'dest' if clickmode else 'src'
 	OLED(source=source,destination=destination,mode=cmodestring)
 # Mainloop functions: ##################################################################
@@ -174,7 +167,11 @@ def screenloop():
 				cmodestring = 'dest' if clickmode else 'src'
 				handlebarcode(intext, source, destination, cmodestring)
 			elif mode == 2:
-				handleadd(intext)
+				try:
+					print(term.red('Type /quit to exit add item.'))
+					handleadd(intext)
+				except BaseException as err:
+					print('Exiting add item...')
 			elif mode == 3:
 				handlesql(intext)
 			elif mode == 4:
