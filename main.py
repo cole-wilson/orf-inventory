@@ -76,8 +76,10 @@ def helptext():
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
 		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
 		print(term.red('ctrl+left and ctrl+right emulate rotary encoder.').center(cols))
+		print((' '*cols)*15)
 helptext() # Call helptext
 def clearhelptext():
+	return
 	with term.location(0,round(rows/3)-12):
 		print(' '.center(cols*10))
 def movecursor(x,y):
@@ -148,6 +150,7 @@ def screenloop():
 					amountofcodes = int(input('Number of codes > '))
 				except:
 					print('Not a valid number!')
+					continue
 				ttprint = input('Text to print > ')
 				for x in range(amountofcodes):
 					print_label(ttprint)
@@ -159,6 +162,7 @@ def screenloop():
 				newmode()
 				continue
 			elif intext.startswith('/.'):
+				print(term.normal,end='')
 				handlesql('SELECT * FROM items')
 				continue
 			elif intext.startswith('/?'):
@@ -167,7 +171,12 @@ def screenloop():
 			print(term.normal+'\033[F'+(message)+(' '*(cols-len(message))) + '\033[F'+(" "*cols)+"\r", end='')
 			if mode == 1:
 				cmodestring = 'dest' if clickmode else 'src'
-				handlebarcode(intext, source, destination, cmodestring)
+				amount = 1
+				if 'x' in intext:
+					amount,intext=intext.split('x')
+					amount = int(amount)
+				for i in range(amount):
+					handlebarcode(intext, source, destination, cmodestring)
 			elif mode == 2:
 				try:
 					print(term.red('Type /quit to exit add item.'))
@@ -207,12 +216,12 @@ def senseloop():
 		time.sleep(0.1)
 		if count % 20 == 0 and last_used() + (5*60) < time.time() and not logo_set:
 			LOGO()
-		if count % 4 == 0:
+		if count % 6 == 0:
 			with term.location(0,0):
 				left = "ORF Replicator v" + __version__
 				right = "Olympia Robotics Federation 4450"
 				center = "{} -> {}".format(source,destination)
-				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
+				print(term.blue_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 	GPIO.cleanup()
 	cleanup()

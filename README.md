@@ -14,6 +14,6 @@ sudo pip3 install keyboard blessed mysql-connector-python zpl prettytable
 
 ## TODO:
  - [x] Add Zebra Label Printer Support
- - [ ] Add OLED Support
- - [ ] Add Rotary Encoder Support
+ - [x] Add OLED Support
+ - [x] Add Rotary Encoder Support
  - [x] Fix web view
