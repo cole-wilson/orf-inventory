@@ -1,12 +1,24 @@
 #/usr/bin/env python3
-
-import treepoem
 import sys
-import zpl
 import os
 
 printername = open('printerloc').read().split('\n')[0]
+zpl = """^xa
+^fo45,30
+^boN,7,N,101,N
+^fd{b}^fs
 
+^fo0,145
+^AAN,15
+^FB203,2,0,C,0
+^fd{c}-{b}\&^fs
+
+^fo0,165
+^AAN,10
+^FB203,2,0,C,0
+^fd{n}\&^fs
+
+^xz"""
 def make_barcode(data):
     data = str(data)
     image = treepoem.generate_barcode(
@@ -23,11 +35,13 @@ def make_zpl(data):
     label.endorigin()
     return label.dumpZPL()
 
-def print_label(data):
+def print_label(barcode,name,category):
     os.system('echo "^xa^fo50,50^boN,3,N,205,N^fd{barcode}^fs^fo50,165^A0,10,20^fd{barcode}^fs^xz" > {printername}'.format(
         printername=printername,
-        barcode=data
+        b=data,
+        n=name,
+        c=category
     ))
 
 if __name__ == '__main__':
-    print_label('This is a test...')
+    print_label('This is a test...',"Test","T")
