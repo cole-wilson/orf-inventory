@@ -19,11 +19,13 @@ padding = 2
 fill = 255
 lastused = 0
 logo_set = False
+display.contrast(200)
 
 def last_used():
 	return lastused
 def LOGO():
 	global logo_set
+	display.contrast(1)
 	logo_set = True
 	bg = Image.new('1',(128,64),'black')
 	img = Image.open('cropped-logo.png').convert(cmode).resize((64,64))
@@ -32,9 +34,11 @@ def LOGO():
 	display.display(bg)
 	#display.display()
 def cleanup():
-	display.cleanup()
+	LOGO()
 
 def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
+	display.contrast(100)
+
 	global lastused
 	global logo_set
 	message = "\n".join(message)

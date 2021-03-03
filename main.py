@@ -59,7 +59,7 @@ clickmode = True
 prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
 states = ['stock','robot','testing']
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 # "clear" screen
 print('\n'*(rows),end='')
@@ -69,7 +69,7 @@ def helptext():
 		for line in range(round(rows/3)):
 			print(' '*cols, end='')
 		for line in open('banner.txt').read().split('\n'):
-			print(term.purple(line).center(cols))
+			print(term.purple(line).ljust(75).center(cols))
 		print((term.red('Welcome to the ORF Replicator!')).center(cols))
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
@@ -182,7 +182,9 @@ def screenloop():
 					print(term.red('Type /quit to exit add item.'))
 					handleadd(intext)
 				except BaseException as err:
-					print('Exiting add item...')
+					if str(err) == '876':
+						err = "none"
+					print('Exiting add item... {}'.format(err))
 			elif mode == 3:
 				handlesql(intext)
 			elif mode == 4:
@@ -214,14 +216,14 @@ def senseloop():
 	count = 0
 	while noerror: # Checks if screenloop has errored, because that won't stop thread
 		time.sleep(0.1)
-		if count % 20 == 0 and last_used() + (5*60) < time.time() and not logo_set:
+		if count % 20 == 0 and last_used() + (2*60) < time.time() and not logo_set:
 			LOGO()
-		if count % 6 == 0:
+		if count % 15 == 0:
 			with term.location(0,0):
 				left = "ORF Replicator v" + __version__
 				right = "Olympia Robotics Federation 4450"
 				center = "{} -> {}".format(source,destination)
-				print(term.blue_on_white(left + center.center(cols-(len(left)+len(right))) + right))
+				print(term.red_on_white(left + center.center(cols-(len(left)+len(right))) + right))
 		count += 1
 	GPIO.cleanup()
 	cleanup()

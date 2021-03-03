@@ -47,16 +47,29 @@ def handleadd(itemname):
 
 	# Get Supplier ================
 	cursor.execute("SELECT * FROM suppliers")
-	validsuppliers = []
+	validsuppliers = ["NEW"]
 	for abbreviation, name in cursor.fetchall():
 		validsuppliers.append(abbreviation)
 		print('{}: {}'.format(abbreviation, name))
+	print('NEW: Create a new supplier')
 	while True:
 		itemsupplier = input('Choose a supplier from the above list > ').upper()
 		if itemsupplier not in validsuppliers:
 			print('That is not a valid option.')
 		else:
 			break
+	if itemsupplier == 'NEW':
+		while True:
+			try:
+				itemsupplier = input('New supplier abbreviation > ').upper()
+				assert len(itemsupplier) == 3, "Length of abbreviation must be exactly three chars long."
+				assert itemsupplier != "NEW", "Supplier abbreviation must not be `NEW`!"
+				assert itemsupplier not in validsuppliers, "Abbreviation already exists!"
+				break
+			except AssertionError as err:
+				print('Error: {}'.format(err))
+		newname = input('New supplier name > ')
+		cursor.execute("INSERT INTO suppliers SET supp_abbr = '{}', supp_name = '{}'".format(itemsupplier,newname))
 	# Get cost
 	while True:
 		itemcost = input('Cost of part > ')
