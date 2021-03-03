@@ -8,7 +8,8 @@ import time
 
 cmode = '1'
 font = ImageFont.truetype('font.ttf', size=18)
-font2 = ImageFont.truetype('font.ttf', size=13)
+font2 = ImageFont.truetype('font.ttf', size=8)
+font3 = ImageFont.truetype('font.ttf', size=13)
 #display = ssd.SSD1306_128_64(rst=0)
 display = sh1106(i2c(port=1, address=0x3C))
 #display.begin()
@@ -46,11 +47,11 @@ def OLED(source=None,destination=None,message=[],mode='dest',messagecolor=255):
 	img = Image.new('1',(128,64),'black')
 	draw = ImageDraw.Draw(img)
 
-	draw.text((0,0), "From: ", font=font, fill=fill)
-	draw.text((0,17), "To:   ", font=font, fill=fill)
+	draw.text((0,0), "From: ", font=font2, fill=fill)
+	draw.text((0,23), "To:   ", font=font2, fill=fill)
 	draw.text((50,0),source, font=font, fill=fill)
 	draw.text((50,17),destination, font=font, fill=fill)
-	draw.text((0,40), message, font=font2, fill=fill)
+	draw.text((0,40), message, font=font3, fill=fill)
 	img.save('output.png')
 	#display.display()
 	display.display(img)
