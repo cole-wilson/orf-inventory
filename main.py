@@ -151,9 +151,9 @@ def screenloop():
 				except:
 					print('Not a valid number!')
 					continue
-				ttprint = input('Text to print > ')
+				ttprint = input('Code to print > ')
 				for x in range(amountofcodes):
-					print_label(ttprint)
+					print_label(ttprint,input('Name of item > '),input('Category of code > '),)
 				continue
 			elif intext.startswith('/quit'):
 				print(term.normal)

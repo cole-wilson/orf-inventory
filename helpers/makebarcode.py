@@ -20,6 +20,7 @@ zpl = """^xa
 
 ^xz"""
 def make_barcode(data):
+    return
     data = str(data)
     image = treepoem.generate_barcode(
             barcode_type='azteccode',
@@ -28,6 +29,7 @@ def make_barcode(data):
     return image.convert('1')
 
 def make_zpl(data):
+    return
     image = make_barcode(data).resize((5,5))
     label = zpl.Label(100,60)
     label.origin((label.width-image.width)/2, 0)
@@ -36,12 +38,13 @@ def make_zpl(data):
     return label.dumpZPL()
 
 def print_label(barcode,name,category):
-    os.system('echo "^xa^fo50,50^boN,3,N,205,N^fd{barcode}^fs^fo50,165^A0,10,20^fd{barcode}^fs^xz" > {printername}'.format(
+    os.system('echo \'{zpl}\' > {printername}'.format(
         printername=printername,
-        b=data,
+	zpl=zpl.format(
+        b=barcode,
         n=name,
         c=category
-    ))
+    )))
 
 if __name__ == '__main__':
     print_label('This is a test...',"Test","T")
