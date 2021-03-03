@@ -74,7 +74,7 @@ def helptext():
 		print((term.red('Type /? for help. Type /quit to exit.')).center(cols))
 		print((term.red('Press the `alt` key (or /mode) to cycle through modes.')).center(cols))
 		print((term.red('Type /. to list all records in the items table.')).center(cols))
-		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
+#		print(term.red('Type /barcode to generate extra barcodes.').center(cols))
 		print(term.red('ctrl+left and ctrl+right emulate rotary encoder.').center(cols))
 		print((' '*cols)*15)
 helptext() # Call helptext
@@ -145,16 +145,19 @@ def screenloop():
 			intext = input("\n"+prompt.format(modes[mode])).replace('^[[','')
 			if intext == '':
 				pass
-			elif intext.startswith('/barcode'):
-				try:
-					amountofcodes = int(input('Number of codes > '))
-				except:
-					print('Not a valid number!')
-					continue
-				ttprint = input('Code to print > ')
-				for x in range(amountofcodes):
-					print_label(ttprint,input('Name of item > '),input('Category of code > '),)
-				continue
+#			elif intext.startswith('/barcode'):
+#				try:
+#					try:
+#						amountofcodes = int(input('Number of codes > '))
+#					except ValueError:
+#						print('Not a valid number!')
+#						continue
+#					ttprint = input('Code to print > ')
+#					for x in range(amountofcodes):
+#						print_label(ttprint,input('Name of item > '),input('Category of code > '),)
+#					continue
+#				except:
+#					continue
 			elif intext.startswith('/quit'):
 				print(term.normal)
 				sys.exit(0)

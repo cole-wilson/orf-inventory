@@ -69,7 +69,7 @@ def handleadd(itemname):
 			except AssertionError as err:
 				print('Error: {}'.format(err))
 		newname = input('New supplier name > ')
-		cursor.execute("INSERT INTO suppliers SET supp_abbr = '{}', supp_name = '{}'".format(itemsupplier,newname))
+		cursor.execute("INSERT INTO suppliers SET sup_abbr = '{}', sup_name = '{}'".format(itemsupplier,newname))
 	# Get cost
 	while True:
 		itemcost = input('Cost of part > ')
@@ -118,6 +118,6 @@ def handleadd(itemname):
 		print('Printing...')
 		for x in range(numprint):
 			print_label(barcode,itemname,itemcategory)
-		print('To print more barcodes, run /barcode.')
+#		print('To print more barcodes, run /barcode.')
 	except mysql.connector.Error as err:
 		pass

@@ -2,10 +2,11 @@
 .vimrc
 .viminfo
 .gitconfig
-.cahce/*
+.cache/*
 .bash_history
 .gnupg/*
 .local/*
 .python_history
 .pythonhistory
 .profile
+#zplcode

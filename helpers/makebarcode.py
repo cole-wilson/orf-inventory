@@ -3,22 +3,7 @@ import sys
 import os
 
 printername = open('printerloc').read().split('\n')[0]
-zpl = """^xa
-^fo45,30
-^boN,7,N,101,N
-^fd{b}^fs
-
-^fo0,145
-^AAN,15
-^FB203,2,0,C,0
-^fd{c}-{b}\&^fs
-
-^fo0,165
-^AAN,10
-^FB203,2,0,C,0
-^fd{n}\&^fs
-
-^xz"""
+zpl = """^xa^fo45,30^boN,7,N,101,N^fd{b}^fs^fo0,145^AAN,15^FB203,2,0,C,0^fd{c}-{b}\&^fs^fo0,165^AAN,10^FB203,2,0,C,0^fd{n}\&^fs^xz"""
 def make_barcode(data):
     return
     data = str(data)
@@ -38,13 +23,13 @@ def make_zpl(data):
     return label.dumpZPL()
 
 def print_label(barcode,name,category):
-    os.system('echo \'{zpl}\' > {printername}'.format(
-        printername=printername,
-	zpl=zpl.format(
-        b=barcode,
-        n=name,
-        c=category
-    )))
+	with open('zplcode', 'w+') as file:
+		file.write(zpl.replace('\n','').format(
+			b=barcode,
+			n=name,
+			c=category
+		))
+	os.system('cat zplcode > {printername}'.format(printername=printername))
 
 if __name__ == '__main__':
     print_label('This is a test...',"Test","T")
