@@ -59,7 +59,7 @@ clickmode = True
 prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
 states = ['stock','new','robot','testing']
-__version__ = "1.2.1"
+__version__ = "1.3.0"
 
 # "clear" screen
 print('\n'*(rows), end='')
