@@ -101,20 +101,20 @@ def handleadd(itemname):
 		db.commit()
 		handlesql("SELECT * from items")
 		print("Added!")
-		while True:
-			if qty_stock < 5:
-				numprint = qty_stock
-				break
-			numprint = input('How many barcodes should I print? [blank for {}] > '.format(qty_stock))
-			if numprint == '':
-				numprint = qty_stock
-				break
-			try:
-				numprint = int(numprint)
-				assert numprint > 0
-				break
-			except:
-				print('That is not a valid number!')
+# 		while True:
+# 			if qty_stock < 5:
+# 				numprint = qty_stock
+# 				break
+# 			numprint = input('How many barcodes should I print? [blank for {}] > '.format(qty_stock))
+# 			if numprint == '':
+# 				numprint = qty_stock
+# 				break
+# 			try:
+# 				numprint = int(numprint)
+# 				assert numprint > 0
+# 				break
+# 			except:
+# 				print('That is not a valid number!')
 		print('Printing...')
 		for x in range(1):#numprint):
 			print_label(barcode,itemname,itemcategory)
