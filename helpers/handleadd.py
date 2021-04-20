@@ -116,7 +116,7 @@ def handleadd(itemname):
 			except:
 				print('That is not a valid number!')
 		print('Printing...')
-		for x in range(numprint):
+		for x in range(1):#numprint):
 			print_label(barcode,itemname,itemcategory)
 #		print('To print more barcodes, run /barcode.')
 	except mysql.connector.Error as err:
