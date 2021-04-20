@@ -58,11 +58,11 @@ destination = 'robot'
 clickmode = True
 prompt = term.green('/? for help') + '  ' + term.cyan+'[{}] > '+term.red
 rows, cols = map(int,os.popen('stty size', 'r').read().split())
-states = ['stock','robot','testing']
-__version__ = "1.2.0"
+states = ['stock','new','robot','testing']
+__version__ = "1.2.1"
 
 # "clear" screen
-print('\n'*(rows),end='')
+print('\n'*(rows), end='')
 # Helper functions: #################################################################
 def helptext():
 	with term.location(0,1):
